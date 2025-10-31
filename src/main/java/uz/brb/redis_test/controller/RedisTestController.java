@@ -59,7 +59,7 @@ public class RedisTestController {
     public Response<?> getAll() {
         List<RedisTest> redisTests = redisTestRepository.findAll();
         for (RedisTest redisTest : redisTests) {
-            redisCacheService.saveData(String.valueOf(redisTest.getId()), redisTest);
+            redisCacheService.saveData(String.valueOf(redisTest.getId()), redisTest, 10, TimeUnit.MINUTES);
         }
         List<Object> redisCacheData = redisCacheService.getAllData();
         return Response.builder()
