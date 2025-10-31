@@ -20,6 +20,43 @@ public class RedisTestServiceImpl implements RedisTestService {
     private final RedisCacheService redisCacheService;
 
     @Override
+    public Response<?> add(RedisTest redisTest) {
+        redisTestRepository.save(redisTest);
+        return Response.builder()
+                .code(HttpStatus.OK.value())
+                .status(HttpStatus.OK)
+                .success(true)
+                .message("Successfully added")
+                .build();
+    }
+
+    @Override
+    public Response<?> get(Long id) {
+        String key = String.valueOf(id);
+        Object data = redisCacheService.getData(key);
+        if (data != null) {
+            return Response.builder()
+                    .code(HttpStatus.OK.value())
+                    .status(HttpStatus.OK)
+                    .success(true)
+                    .message("Successfully found")
+                    .data(data)
+                    .build();
+        } else {
+            RedisTest redisTest = redisTestRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("RedisTest not found"));
+            redisCacheService.saveData(key, redisTest, 10, TimeUnit.MINUTES);
+            return Response.builder()
+                    .code(HttpStatus.OK.value())
+                    .status(HttpStatus.OK)
+                    .success(true)
+                    .message("Successfully added")
+                    .data(redisTest)
+                    .build();
+        }
+    }
+
+    @Override
     public Response<?> getAll(Pageable pageable) {
         List<RedisTest> redisTests = redisTestRepository.findAll(pageable).getContent();
         for (RedisTest redisTest : redisTests) {

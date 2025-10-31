@@ -7,7 +7,7 @@ spring:
 
   # PostgreSQL config
   datasource:
-    url: jdbc:postgresql://localhost:5432/project?currentSchema=redis_cache
+    url: jdbc:postgresql://localhost:5432/project?currentSchema=redis_test_cache
     username: postgres
     password: 2210
     driver-class-name: org.postgresql.Driver
