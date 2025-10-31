@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.brb.redis_test.dto.response.Response;
 import uz.brb.redis_test.entity.RedisTest;
+import uz.brb.redis_test.exception.ResourceNotFoundException;
 import uz.brb.redis_test.repository.RedisTestRepository;
 import uz.brb.redis_test.service.RedisTestService;
 import uz.brb.redis_test.service.logic.RedisCacheService;
@@ -44,7 +45,7 @@ public class RedisTestServiceImpl implements RedisTestService {
                     .build();
         } else {
             RedisTest redisTest = redisTestRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("RedisTest not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("RedisTest not found"));
             redisCacheService.saveData(key, redisTest, 10, TimeUnit.MINUTES);
             return Response.builder()
                     .code(HttpStatus.OK.value())
