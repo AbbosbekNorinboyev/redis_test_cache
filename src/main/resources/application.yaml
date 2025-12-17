@@ -40,6 +40,12 @@ spring:
       timeout: 3000ms
       repositories:
         enabled: true
+      jedis:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 5
+          max-wait: 2000ms
   cache:
     type: redis
 
